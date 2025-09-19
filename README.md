@@ -84,4 +84,13 @@ poetry run python rabbit_mq_worker.py
 - `rabbit_mq_worker.py` — потребитель очереди `training_events`, пересчёт `Stats`
 - `docker-compose.yaml` — Django, RabbitMQ, воркер
 
+# roadmap
+что выполнено:
+    добавлены модели, сигналы, миграции и вся django логика
+    добавлен rabbitmq и воркер для пересчета статистики
+    добавлен docker compose для разработки и production
 
+
+что нужно сделать:
+    добавить vuejs frontend с авторизацией и CRUD для сессий
+    добавить fastapi backend с CRUD для сессий (также связанный с rabbitmq)
