@@ -1,0 +1,52 @@
+version: '3.3'
+
+services: 
+  drum_practice_tracker_django:
+    container_name: drum-practice-tracker
+    restart: unless-stopped
+    build: .
+    command: poetry run python manage.py runserver 0.0.0.0:8000
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    environment:
+        DB_NAME: ${DB_NAME}
+        DB_USER: ${DB_USER}
+        DB_PASSWORD: ${DB_PASSWORD}
+        DB_HOST: ${DB_HOST}
+        DB_PORT: ${DB_PORT}
+    expose:
+      - 8000
+    ports:
+      - "8000:8000"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: drums_rabbitmq
+    ports:
+      - "5672:5672"   # порт для приложений
+      - "15672:15672" # веб-интерфейс
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  worker:
+    build: .
+    container_name: rabbit_mq_worker
+    command: poetry run python rabbit_mq_worker.py
+    depends_on:
+      - rabbitmq
+      - drum_practice_tracker_django
+    volumes:
+      - .:/app
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+      RABBIT_MQ_PORT: ${RABBIT_MQ_PORT}
+      RABBIT_MQ_CONTAINER: ${RABBIT_MQ_CONTAINER}
+
+volumes:
+  rabbitmq_data:
