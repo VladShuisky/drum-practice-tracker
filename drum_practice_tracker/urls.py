@@ -15,8 +15,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+from rest_framework.schemas import get_schema_view
+from rest_framework.renderers import JSONOpenAPIRenderer
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("api/auth/", include("users.urls")),
+    path("schema/", get_schema_view(
+        title="API Schema",
+        description="Автоматическая схема для Postman или Swagger",
+        version="1.0.0",
+        renderer_classes=[JSONOpenAPIRenderer]
+    ), name="openapi-schema"),
 ]
