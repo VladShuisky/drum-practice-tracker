@@ -43,9 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
-    'training.apps.TrainingConfig',
+    # 'training.apps.TrainingConfig',
+    'training',
     "rest_framework",
     "rest_framework_simplejwt",
+    "django_extensions"
 ]
 
 MIDDLEWARE = [

@@ -28,4 +28,5 @@ urlpatterns = [
         version="1.0.0",
         renderer_classes=[JSONOpenAPIRenderer]
     ), name="openapi-schema"),
+    path('api/training/', include('training.urls'))
 ]
